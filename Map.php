@@ -1,6 +1,6 @@
 <?php
 
-namespace tugmaks\GoogleMaps;
+namespace voime\GoogleMaps;
 
 use Yii;
 
