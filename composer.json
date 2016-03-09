@@ -1,13 +1,13 @@
 {
-    "name": "tugmaks/yii2-google-maps",
+    "name": "voime/yii2-google-maps",
     "description": "Google Maps Yii2 wrapper",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Maxim Tugaev",
-            "email": "tugmaks@yandex.ru"
+            "name": "Arvi Võime",
+            "email": "avoime@gmail.com"
         }
     ],
     "require": {
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "tugmaks\\GoogleMaps\\": ""
+            "voime\\GoogleMaps\\": ""
         }
     }
 }

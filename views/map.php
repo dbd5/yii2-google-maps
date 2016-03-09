@@ -1,5 +1,5 @@
-<div style="width: <?= $this->context->width . $this->context->widthUnits?>;
-    height: <?= $this->context->height . $this->context->heightUnits?>">
+<div style="width: <?= $this->context->width?>;
+    height: <?= $this->context->height?>">
     <div id="map_canvas" style="width:100%; height:100%"></div>
 </div>
 <script>
@@ -38,6 +38,14 @@
         <?php endif; ?>
         <?php if (is_array($marker['position'])): ?>
         marker_<?= $key ?>.setPosition(new google.maps.LatLng(<?= $marker['position'][0] ?>, <?= $marker['position'][1] ?>));
+        <?php if (isset($marker['content'])): ?>
+        var infowindow_<?= $key ?> = new google.maps.InfoWindow({
+            content: '<?= $marker['content'] ?>'
+          });
+        marker_<?= $key ?>.addListener('click', function() {
+          infowindow_<?= $key ?>.open(window.map, marker_<?= $key ?>);
+        });
+        <?php endif; ?>
         <?php if ($this->context->markerFitBounds): ?>
         window.bounds.extend(marker_<?= $key ?>.position);
         window.map.fitBounds(bounds);
@@ -68,4 +76,3 @@
     }
     window.onload = loadScript;
 </script>
-
