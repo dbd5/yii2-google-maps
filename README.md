@@ -3,8 +3,8 @@ Google Maps Yii2 wrapper
 Google Maps Yii2 wrapper
 
 Forked from [https://github.com/tugmaks/yii2-google-maps] and
-    * added Infowindow support
-    * removed units parameters.
+  * added Infowindow support
+  * removed units parameters.
 
 Installation
 ------------
