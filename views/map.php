@@ -9,6 +9,11 @@
         var geocoder = new google.maps.Geocoder();
         window.map = new google.maps.Map(document.getElementById("map_canvas"),
             {
+                <?php if (!empty($this->context->mapOptions) && is_array($this->context->mapOptions)): ?>
+                <?php foreach ($this->context->mapOptions as $mapOptionKey => $mapOption): ?>
+                <?=$mapOptionKey?>: <?=$mapOption?>,
+                <?php endforeach; ?>
+                <?php endif; ?>
                 zoom: <?= $this->context->zoom ?>,
                 mapTypeId: google.maps.MapTypeId.<?= $this->context->mapType ?>,
                 center: new google.maps.LatLng(0, 0)
@@ -31,6 +36,11 @@
         <?php if (!empty($this->context->markers) && is_array($this->context->markers)): ?>
         <?php foreach ($this->context->markers as $key => $marker): ?>
         var marker_<?= $key ?> = new google.maps.Marker({
+            <?php if (!empty($marker['options']) && is_array($marker['options'])): ?>
+            <?php foreach ($marker['options'] as $optionKey => $option): ?>
+            <?=$optionKey?>: <?=$option?>,
+            <?php endforeach; ?>
+            <?php endif; ?>
             map: window.map
         });
         <?php if (isset($marker['title'])): ?>

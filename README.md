@@ -3,8 +3,10 @@ Google Maps Yii2 wrapper
 Google Maps Yii2 wrapper
 
 Forked from [https://github.com/tugmaks/yii2-google-maps] and
-  * added Infowindow support
+  * added Infowindow support.
   * removed units parameters.
+  * added mapOptions parameters. (styles)
+  * added marker options. (icon)
 
 Installation
 ------------
@@ -77,6 +79,7 @@ Parameters
 
 | Name  | Description |
 | ------------- | ------------- |
+| mapOptions  | array, not required, map object options |
 | zoom  | integer, not required, default 16 |
 | center  | array or string, required. If array lat and lng will be used, if string search query will be used. For example: ```php 'center'=>[23.091,100.412] ``` or ```php 'center'=>'London, UK' ``` |
 | width | string, not required, default 600px. div wrapper width |
@@ -93,13 +96,11 @@ One or more marker can be added to map. Just pass marker array to widget config
 use voime\GoogleMaps\Map;
 
 echo Map::widget([
+    'mapOptions' => ['styles' => file_get_contents(Yii::getAlias('@webroot/res/map-styles.json'))],
     'zoom' => 5,
     'center' => [45, 45],
-    'width' => '100%,
-    'height' => '100%',
-    'mapType' => Map::MAP_TYPE_HYBRID,
     'markers' => [
-        ['position' => 'Tartu', 'title' => 'marker title', 'content' => 'InfoWindow content'],
+        ['position' => 'Tartu', 'title' => 'marker title', 'content' => 'InfoWindow content', 'options' => ["icon" => "'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'"]],
         ['position' => [56,27]],
     ]
 ]);
@@ -115,6 +116,7 @@ The following options are allowed:
 | position  | string or array, required. If array lat and lng will be used, if string search query will be used. |
 | title  | string, not required. Rollover text |
 | content  | string, not required. Infowindow text |
+| options  | array, not required. Marker options |
 
 MARKERS FIT BOUNDS
 -----

@@ -12,12 +12,13 @@ class Map extends \yii\base\Widget {
     const MAP_TYPE_TERRAIN = 'TERRAIN';
 
     public $sensor = false;
-    public $width = '600px';
-    public $height = '600px';
+    public $width = '100%';
+    public $height = '100%';
     public $center = 'Riia 184, Tartu, Tartu linn, Estonia';
     public $zoom = 12;
     public $mapType = 'ROADMAP';
     public $markers = [];
+    public $mapOptions = [];
     public $apiKey = null;
     public $markerFitBounds = false;
 
