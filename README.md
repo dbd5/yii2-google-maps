@@ -16,13 +16,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist voime/yii2-google-maps "dev-master"
+php composer.phar require --prefer-dist voime/yii2-google-maps "*"
 ```
 
 or add
 
 ```
-"voime/yii2-google-maps": "dev-master"
+"voime/yii2-google-maps": "*"
 ```
 
 to the require section of your `composer.json` file.
