@@ -4,7 +4,7 @@ namespace voime\GoogleMaps;
 
 use Yii;
 
-class Map extends \yii\base\Widget {
+class MapInput extends \yii\base\Widget {
 
     const MAP_TYPE_ROADMAP = 'ROADMAP';
     const MAP_TYPE_HYBRID = 'HYBRID';
@@ -18,10 +18,15 @@ class Map extends \yii\base\Widget {
     public $center = 'Riia 184, Tartu, Tartu linn, Estonia';
     public $zoom = 12;
     public $mapType = 'ROADMAP';
-    public $markers = [];
     public $mapOptions = [];
+    public $markerOptions = [];
     public $apiKey = null;
-    public $markerFitBounds = false;
+
+    public $countryInput = null;
+    public $addressInput = 'address-input';
+    public $latInput = 'lat-input';
+    public $lngInput = 'lng-input';
+
 
     public function init() {
         if ($this->apiKey === null) {
@@ -33,7 +38,7 @@ class Map extends \yii\base\Widget {
 
     public function run() {
 
-        return $this->render('map');
+        return $this->render('mapInput');
     }
 
 }

@@ -1,13 +1,13 @@
 <div style="width: <?= $this->context->width?>;
     height: <?= $this->context->height?>">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
+    <div id="<?= $this->context->mapCanvas?>" style="width:100%; height:100%"></div>
 </div>
 <script>
     var map;
     var bounds;
     function initialize() {
         var geocoder = new google.maps.Geocoder();
-        window.map = new google.maps.Map(document.getElementById("map_canvas"),
+        window.map = new google.maps.Map(document.getElementById("<?= $this->context->mapCanvas?>"),
             {
                 <?php if (!empty($this->context->mapOptions) && is_array($this->context->mapOptions)): ?>
                 <?php foreach ($this->context->mapOptions as $mapOptionKey => $mapOption): ?>
