@@ -177,7 +177,7 @@
 
 
     function geocodeLocation(location){
-        console.log("decode" + location);
+        //console.log("decode" + location);
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({
               "location": location.latLng
