@@ -20,29 +20,57 @@
             }
         );
 
-        <?php if (is_array($this->context->center)): ?>
-        var center = new google.maps.LatLng(<?= $this->context->center[0] ?>, <?= $this->context->center[1] ?>);
-        gMarker = new google.maps.Marker({
-            <?php if (!empty($this->context->markerOptions) && is_array($this->context->markerOptions)): ?>
-            <?php foreach ($this->context->markerOptions as $markerOptionKey => $markerOption): ?>
-            <?=$markerOptionKey?>: <?=$markerOption?>,
-            <?php endforeach; ?>
-            <?php endif; ?>
-            map: map,
-            draggable: true,
-            position: center
-          });
+        var latInput = document.getElementById('<?= $this->context->latInput?>').value;
+        var lngInput = document.getElementById('<?= $this->context->lngInput?>').value;
+        //console.log(latInput);
 
-        window.map.setCenter(center);
-        <?php else: ?>
-        geocoder.geocode({
-            "address": "<?= $this->context->center ?>"
-        }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                window.map.setCenter(results[0].geometry.location);
-            }
+        if (latInput != "" && lngInput !="" ){
+            var center = new google.maps.LatLng(latInput, lngInput);
+            gMarker = new google.maps.Marker({
+                <?php if (!empty($this->context->markerOptions) && is_array($this->context->markerOptions)): ?>
+                <?php foreach ($this->context->markerOptions as $markerOptionKey => $markerOption): ?>
+                <?=$markerOptionKey?>: <?=$markerOption?>,
+                <?php endforeach; ?>
+                <?php endif; ?>
+                map: map,
+                draggable: true,
+                position: center
+              });
+
+            window.map.setCenter(center);
+
+        }else{
+
+            <?php if (is_array($this->context->center)): ?>
+            var center = new google.maps.LatLng(<?= $this->context->center[0] ?>, <?= $this->context->center[1] ?>);
+            gMarker = new google.maps.Marker({
+                <?php if (!empty($this->context->markerOptions) && is_array($this->context->markerOptions)): ?>
+                <?php foreach ($this->context->markerOptions as $markerOptionKey => $markerOption): ?>
+                <?=$markerOptionKey?>: <?=$markerOption?>,
+                <?php endforeach; ?>
+                <?php endif; ?>
+                map: map,
+                draggable: true,
+                position: center
+              });
+
+            window.map.setCenter(center);
+            <?php else: ?>
+            geocoder.geocode({
+                "address": "<?= $this->context->center ?>"
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    window.map.setCenter(results[0].geometry.location);
+                }
+            });
+            <?php endif; ?>
+        }
+
+        google.maps.event.addListener(gMarker,'dragend',function(event){
+            //console.log(event);
+            document.getElementById('<?= $this->context->latInput?>').value =event.latLng.lat();
+            document.getElementById('<?= $this->context->lngInput?>').value =event.latLng.lng();
         });
-        <?php endif; ?>
 
         // Create the search box and link it to the UI element.
         var input = document.getElementById('<?= $this->context->addressInput?>');
@@ -74,7 +102,9 @@
           var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
               // delete old marker
-              gMarker.setMap(null);
+              if (typeof gMarker !== 'undefined'){
+                gMarker.setMap(null);
+              }
 
               gMarker = new google.maps.Marker({
                   <?php if (!empty($this->context->markerOptions) && is_array($this->context->markerOptions)): ?>
@@ -103,16 +133,16 @@
               }
             }
             // put lat lng
-            document.getElementById('<?= $this->context->latInput?>').value = marker.getPosition().lat();
-            document.getElementById('<?= $this->context->lngInput?>').value = marker.getPosition().lng();
+            document.getElementById('<?= $this->context->latInput?>').value = gMarker.getPosition().lat();
+            document.getElementById('<?= $this->context->lngInput?>').value = gMarker.getPosition().lng();
 
-            google.maps.event.addListener(marker,'dragend',function(event){
+            google.maps.event.addListener(gMarker,'dragend',function(event){
                 //console.log(event);
                 document.getElementById('<?= $this->context->latInput?>').value =event.latLng.lat();
                 document.getElementById('<?= $this->context->lngInput?>').value =event.latLng.lng();
             });
 
-            markers.push(marker);
+            //markers.push(marker);
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.

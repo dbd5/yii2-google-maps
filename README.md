@@ -7,6 +7,7 @@ Forked from [https://github.com/tugmaks/yii2-google-maps] and
   * removed units parameters.
   * added mapOptions parameters. (styles)
   * added marker options. (icon)
+  * added mapInput widget
 
 Installation
 ------------
@@ -139,3 +140,35 @@ echo Map::widget([
     ],
     'markerFitBounds'=>true
 ]);
+
+MAPINPUT
+-----
+
+MapInput widget example. This need the following inputs
+  * address-input for address seach on map
+  * lat-input for latitude
+  * lng-input for longitude
+  * country-input for country name [optional]
+
+
+```php
+use voime\GoogleMaps\MapInput;
+
+<?= $form->field($model, 'address')->textInput(['id'=>'address-input']) ?>
+
+<?php
+echo MapInput::widget([
+    'height' => '400px',
+    'zoom' => Yii::$app->params['map_zoom_one'],
+    'countryInput' => 'country-input',
+    'mapOptions' => [
+        'styles' => file_get_contents(Yii::getAlias('@webroot/res/map-styles.json')),
+        'maxZoom' => '15',
+    ],
+    'markerOptions' => ['icon'=>"'" . Yii::getAlias('@web/res/img/marker.png') . "'"],
+]);
+?>
+<?=$form->field($model, 'latitude')->hiddenInput(['id'=>'lat-input'])->label(false) ?>
+<?=$form->field($model, 'longitude')->hiddenInput(['id'=>'lng-input'])->label(false) ?>
+<?=$form->field($model, 'country')->hiddenInput(['id'=>'country-input'])->label(false) ?>
+````
