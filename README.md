@@ -140,6 +140,7 @@ echo Map::widget([
     ],
     'markerFitBounds'=>true
 ]);
+```
 
 MAPINPUT
 -----
