@@ -38,9 +38,10 @@
               });
 
             window.map.setCenter(center);
-
+            google.maps.event.addListener(gMarker,'dragend',function(event){
+                geocodeLocation(event);
+            });
         }else{
-
             <?php if (is_array($this->context->center)): ?>
             var center = new google.maps.LatLng(<?= $this->context->center[0] ?>, <?= $this->context->center[1] ?>);
             gMarker = new google.maps.Marker({
@@ -55,23 +56,44 @@
               });
 
             window.map.setCenter(center);
+            google.maps.event.addListener(gMarker,'dragend',function(event){
+                geocodeLocation(event);
+            });
+
+            });
             <?php else: ?>
             geocoder.geocode({
                 "address": "<?= $this->context->center ?>"
             }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
-                    window.map.setCenter(results[0].geometry.location);
+                    var center = results[0].geometry.location;
+                    window.map.setCenter(center);
                 }
             });
             <?php endif; ?>
         }
+            // insert marker if no markers on map
+            google.maps.event.addListener(map,'click',function(event){
+                if (typeof gMarker === 'undefined'){
+                    gMarker = new google.maps.Marker({
+                        <?php if (!empty($this->context->markerOptions) && is_array($this->context->markerOptions)): ?>
+                        <?php foreach ($this->context->markerOptions as $markerOptionKey => $markerOption): ?>
+                        <?=$markerOptionKey?>: <?=$markerOption?>,
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                        map: map,
+                        draggable: true,
+                        position: event.latLng
+                      });
 
-        google.maps.event.addListener(gMarker,'dragend',function(event){
-            //console.log(event);
-            document.getElementById('<?= $this->context->latInput?>').value =event.latLng.lat();
-            document.getElementById('<?= $this->context->lngInput?>').value =event.latLng.lng();
-        });
+                      google.maps.event.addListener(gMarker,'dragend',function(event){
+                          geocodeLocation(event);
+                      });
 
+                    geocodeLocation(event);
+
+                }
+            });
         // Create the search box and link it to the UI element.
         var input = document.getElementById('<?= $this->context->addressInput?>');
         var searchBox = new google.maps.places.SearchBox(input);
@@ -137,9 +159,7 @@
             document.getElementById('<?= $this->context->lngInput?>').value = gMarker.getPosition().lng();
 
             google.maps.event.addListener(gMarker,'dragend',function(event){
-                //console.log(event);
-                document.getElementById('<?= $this->context->latInput?>').value =event.latLng.lat();
-                document.getElementById('<?= $this->context->lngInput?>').value =event.latLng.lng();
+                geocodeLocation(event);
             });
 
             //markers.push(marker);
@@ -154,6 +174,36 @@
           map.fitBounds(bounds);
         });
       }
+
+
+    function geocodeLocation(location){
+        console.log("decode" + location);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+              "location": location.latLng
+          }, function (results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                  // get gountry from places object
+                  for(var i = 0; i < results[0].address_components.length; i += 1) {
+                    var addressObj = results[0].address_components[i];
+                    for(var j = 0; j < addressObj.types.length; j += 1) {
+                      <?php if (!empty($this->context->countryInput)):?>
+                      if (addressObj.types[j] === 'country') {
+                        //console.log(addressObj.types[j]); // confirm that this is 'country'
+                        //console.log(addressObj.long_name); // confirm that this is the country name
+                        document.getElementById('<?= $this->context->countryInput?>').value = addressObj.long_name;
+                      }
+                      <?php endif; ?>
+                    }
+                  }
+                  document.getElementById('<?= $this->context->addressInput?>').value = results[0].formatted_address;
+              }
+          });
+
+        document.getElementById('<?= $this->context->latInput?>').value = location.latLng.lat();
+        document.getElementById('<?= $this->context->lngInput?>').value = location.latLng.lng();
+
+    }
 
     function loadScript() {
         var script = document.createElement("script");
