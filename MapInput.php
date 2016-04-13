@@ -13,6 +13,7 @@ class MapInput extends \yii\base\Widget {
 
     public $sensor = false;
     public $mapCanvas = 'map_canvas';
+    public $language = 'en';
     public $width = '100%';
     public $height = '100%';
     public $center = 'Riia 184, Tartu, Tartu linn, Estonia';
