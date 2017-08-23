@@ -22,6 +22,8 @@ class Map extends \yii\base\Widget {
     public $mapOptions = [];
     public $apiKey = null;
     public $markerFitBounds = false;
+    public $language = 'en';
+    public $region = 'US';
 
     public function init() {
         if ($this->apiKey === null) {
