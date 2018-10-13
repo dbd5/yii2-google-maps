@@ -55,13 +55,13 @@
                 position: center
               });
 
-            window.map.setCenter(center);
-            google.maps.event.addListener(gMarker,'dragend',function(event){
-                geocodeLocation(event);
-            });
+                window.map.setCenter(center);
+                google.maps.event.addListener(gMarker,'dragend',function(event){
+                    geocodeLocation(event);
+                });
 
-            });
             <?php else: ?>
+
             geocoder.geocode({
                 "address": "<?= $this->context->center ?>"
             }, function (results, status) {
@@ -71,6 +71,8 @@
                 }
             });
             <?php endif; ?>
+
+
         }
             // insert marker if no markers on map
             google.maps.event.addListener(map,'click',function(event){
@@ -142,6 +144,7 @@
                 window.map.setCenter(place.geometry.location);
 
             // get gountry from places object
+
             for(var i = 0; i < place.address_components.length; i += 1) {
               var addressObj = place.address_components[i];
               for(var j = 0; j < addressObj.types.length; j += 1) {
@@ -205,11 +208,15 @@
 
     }
 
-    function loadScript() {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://maps.googleapis.com/maps/api/js?key=<?= $this->context->apiKey ?>&sensor=<?= $this->context->sensor ?>&libraries=places&callback=initialize&language=<?= $this->context->language ?>";
-        document.body.appendChild(script);
-    }
-    window.onload = loadScript;
+    <?php if ($this->context->mapLoaded): ?>
+        initialize();
+    <?php else: ?>
+        (function loadScript() {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://maps.googleapis.com/maps/api/js?key=<?= $this->context->apiKey ?>&sensor=<?= $this->context->sensor ?>&libraries=places&callback=initialize&language=<?= $this->context->language ?>";
+            document.body.appendChild(script);
+        })();
+    <?php endif; ?>
+
 </script>

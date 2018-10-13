@@ -13,6 +13,7 @@ class Map extends \yii\base\Widget {
 
     public $sensor = false;
     public $mapCanvas = 'map_canvas';
+    public $mapLoaded = true;
     public $width = '100%';
     public $height = '100%';
     public $center = 'Riia 184, Tartu, Tartu linn, Estonia';
@@ -21,20 +22,18 @@ class Map extends \yii\base\Widget {
     public $markers = [];
     public $mapOptions = [];
     public $apiKey = null;
+    public $apiKeyParamsKey = null;
     public $markerFitBounds = false;
-    public $language = 'en';
-    public $region = 'US';
 
     public function init() {
-        if ($this->apiKey === null) {
-            $this->apiKey = Yii::$app->params['GOOGLE_API_KEY'];
+        if ($this->apiKey === null && isset(\Yii::$app->params[$this->apiKeyParamsKey])) {
+            $this->apiKey = \Yii::$app->params[$this->apiKeyParamsKey];
         }
         $this->sensor = $this->sensor ? 'true' : 'false';
         parent::init();
     }
 
     public function run() {
-
         return $this->render('map');
     }
 
