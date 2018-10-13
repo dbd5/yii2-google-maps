@@ -13,7 +13,7 @@ class MapInput extends \yii\base\Widget {
 
     public $sensor = false;
     public $mapCanvas = 'map_canvas';
-    public $mapLoaded = true;
+    public $mapLoaded = false;
     public $language = 'en';
     public $width = '100%';
     public $height = '100%';
